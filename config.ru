@@ -1,4 +1,4 @@
 require 'rubygems'
 require 'sinatra'
-require 'weather'
+require './weather'
 run Sinatra::Application
