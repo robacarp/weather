@@ -1,0 +1,97 @@
+!!!5
+
+%html
+  %head
+    %title &mu;weather
+    %script(src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript")
+    :javascript
+        $( function( $ ) {
+                new_request(80303);
+                $('#legal-clicker').click(function(e){
+                    $('#legal').slideToggle();
+                })
+            }
+         );
+
+        function new_request(zipcode){
+          var query = 'select * from weather.forecast where location="' + zipcode + '"'
+          var url = "http://query.yahooapis.com/v1/public/yql?q=" + escape(query) + "&format=json&callback="
+          $.ajax(url, { success: handle_response })
+        }
+
+        function handle_response(xhr){
+          conditions  = xhr.query.results.channel.item.condition.text;
+          temperature = xhr.query.results.channel.item.condition.temp;
+          city        = xhr.query.results.channel.item.title;
+
+          $('#display')
+            .find('#conditions').text( conditions ).end()
+            .find('#temperature').text( temperature ).end()
+            .find('#location')  .text( city )      .end()
+            .find('.icon')      .removeClass().addClass('icon').addClass( conditions_to_class(conditions) ).end()
+          .show();
+        }
+
+        function conditions_to_class(conditions){
+          conditions = conditions.toLowerCase();
+
+          return conditions;
+        }
+
+        function convert_temperature( farenheit ){
+          return (farenheit - 32) * 5 / 9;
+        }
+
+    :css
+        body {
+          margin: 1em auto;
+          width: 400px;
+          background-color:#fff;
+          color: #222;
+          font-family: "Lucida Grande";
+          text-align: center;
+        }
+
+        #display { display:none; }
+
+        #legal-wrap {
+            position: absolute;
+            bottom: 10px;
+            left:0px;
+            width: 100%;
+        }
+
+        #legal-clicker  {
+            font-size: 0.8em;
+            cursor:pointer;
+            width: 100px;
+            margin: auto;
+            color: #07e;
+        }
+
+        #legal { 
+            display:none;
+            font-size: 0.8em;
+            width: 300px; 
+            margin: auto;
+        }
+
+        #legal a { color: #07e; }
+
+        .icon {
+          background: url("/Sprites.png");
+          background-position: top 0px left -300px;
+          background-repeat: no-repeat;
+          width:283px; height: 300px;
+          margin: 0 auto;
+        }
+
+        .sun    { background-position: top  0px    left 0px; }
+        .snow   { background-position: top -339px  left 0px; }
+        .rain   { background-position: top -699px  left 0px; }
+        .clouds { background-position: top -1057px left 0px; }
+        .hail   { background-position: top -1359px left 0px; }
+        .cloudy { background-position: top -1732px left 0px; }
+
+  %body
+    = yield
