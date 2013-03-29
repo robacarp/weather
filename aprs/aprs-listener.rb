@@ -29,7 +29,7 @@ while line = aprs.gets
   puts "SENDER: \033[31m#{message.sender}\033[0m"
   puts "DEST  : \033[33m#{message.dest}\033[0m"
   puts "PATH  : \033[37m#{message.route}\033[0m"
-  puts "DATA  : #{message.data}"
+  puts "DATA  : #{message.raw_data}"
   puts "PACKET: #{line}"
   puts "\n-----------"
 end
