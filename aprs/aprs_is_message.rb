@@ -1,5 +1,7 @@
+require './dms'
+
 class AprsIsMessage
-  attr_accessor :sender, :dest, :route, :raw_data
+  attr_reader :from, :to, :route, :raw_data, :lat, :long, :time
 
   def self.parse line
     mess = self.new
@@ -8,13 +10,22 @@ class AprsIsMessage
   end
 
   def parse line
+    @from =
+      @to =
+      @route =
+      @raw_data =
+      @lat =
+      @long =
+      @time =
+        nil
+
     matched = line =~ /^([a-zA-Z0-9-]*)>([^,]*),([^:]*):(.*)$/
 
     return if matched.nil?
-    self.sender   = $1
-    self.dest     = $2
-    self.route    = $3
-    self.raw_data = $4
+    @from     = $1
+    @to       = $2
+    @route    = $3
+    @raw_data = $4
 
     parse_data
   end
@@ -76,17 +87,20 @@ class AprsIsMessage
 
 
   def parse_coords data
-    # DDMM.hh
+    # DDMM.hhX/DDDMM.hhX
     # 5209.97N/00709.65W
     # 3107.77N/12124.52E
     # 4820.32N/00809.24E
-    lat, lon = data.split '/'
+    lat, long = data.upcase.split '/'
 
     lat_sign = lat[-1] == 'N' ? 1 : -1
-    lon_sign = lon[-1] == 'E' ? 1 : -1
+    long_sign = long[-1] == 'E' ? 1 : -1
 
-    self.lat = lat.to_f * lat_sign
-    self.lon = lon.to_f * lon_sign
+    @lat = DMS.new
+    @long = DMS.new
+
+    @lat.set lat[0..1].to_f * lat_sign, lat[2..-2].to_f * lat_sign
+    @long.set long[0..2].to_f * long_sign, long[3..-2].to_f * long_sign
   end
 
   def parse_time data
@@ -113,7 +127,7 @@ class AprsIsMessage
       month = 12
     end
 
-    self.time = Time.new(
+    @time = Time.new(
       year,
       month,
       day,
@@ -122,5 +136,13 @@ class AprsIsMessage
       0,
       0
     )
+  end
+
+  def hour
+    @time.hour unless @time.nil?
+  end
+
+  def min
+    @time.min unless @time.nil?
   end
 end
