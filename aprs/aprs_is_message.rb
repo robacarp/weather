@@ -2,19 +2,21 @@ class AprsIsMessage
   attr_accessor :sender, :dest, :route, :raw_data
 
   def self.parse line
+    mess = self.new
+    mess.parse line
+    mess
+  end
+
+  def parse line
     matched = line =~ /^([a-zA-Z0-9-]*)>([^,]*),([^:]*):(.*)$/
 
     return if matched.nil?
+    self.sender   = $1
+    self.dest     = $2
+    self.route    = $3
+    self.raw_data = $4
 
-    mess = self.new
-    mess.sender = $1
-    mess.dest   = $2
-    mess.route  = $3
-    mess.raw_data   = $4
-
-    mess.parse_data
-
-    mess
+    parse_data
   end
 
   # http://www.aprs.net/vm/DOS/PROTOCOL.HTM
@@ -27,7 +29,7 @@ class AprsIsMessage
                        .map{|(a,b)| [a,b]}
 
     segments.each do |(type, message)|
-      puts "\t #{type} >> #{message}"
+      # puts "\t #{type} >> #{message}"
       case type
       when '='
         equal message
@@ -51,8 +53,8 @@ class AprsIsMessage
     # 3107.77N/12124.52E
     # Position data
     ns, ew = data.split('/')
-    puts "\t\t LAT: #{ns}"
-    puts "\t\t LON: #{ew}"
+    # puts "\t\t LAT: #{ns}"
+    # puts "\t\t LON: #{ew}"
   end
 
   def at data
@@ -61,8 +63,6 @@ class AprsIsMessage
     time_format = data[6]
     time = data[0..5]
     coords = data[7..-1]
-
-    debugger if coords.nil?
     parse_coords coords
   end
 
