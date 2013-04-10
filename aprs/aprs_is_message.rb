@@ -57,7 +57,7 @@ class AprsIsMessage
   end
 
   def bang data
-    # 4820.32N/00809.24E
+    parse_coords data
   end
 
   def equal data
@@ -99,8 +99,8 @@ class AprsIsMessage
     @lat = DMS.new
     @long = DMS.new
 
-    @lat.set lat[0..1].to_f * lat_sign, lat[2..-2].to_f * lat_sign
-    @long.set long[0..2].to_f * long_sign, long[3..-2].to_f * long_sign
+    @lat.set lat[0..1].to_f * lat_sign, lat[2..-2].to_f
+    @long.set long[0..2].to_f * long_sign, long[3..-2].to_f
   end
 
   def parse_time data

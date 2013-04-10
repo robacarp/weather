@@ -19,18 +19,18 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
 
   def test_coordinate_parser
     @aim.parse_coords('5209.97N/00709.65W')
-    assert_equal 52,   @aim.lat.degrees
-    assert_equal 9,    @aim.lat.minutes
+    assert_equal 52,   @aim.lat.degrees, "degrees should be 52, instead got #{@aim.lat.degrees}"
+    assert_equal 9,    @aim.lat.minutes, "minutes should be  9, instead got #{@aim.lat.minutes}"
     assert 58.2 - @aim.lat.seconds < 0.0001
 
-    assert_equal -7,   @aim.long.degrees
-    assert_equal -9,   @aim.long.minutes
-    assert -39 - @aim.long.seconds < 0.0001
+    assert_equal -7,   @aim.long.degrees, "degrees should be -7, instead got #{@aim.long.degrees}"
+    assert_equal 9,   @aim.long.minutes, "minutes should be 9, instead got #{@aim.long.minutes}"
+    assert 39 - @aim.long.seconds < 0.0001
 
     @aim.parse_coords('5209.97S/00709.65E')
     assert_equal -52,   @aim.lat.degrees
-    assert_equal -9,    @aim.lat.minutes
-    assert -58.2 - @aim.lat.seconds < 0.0001
+    assert_equal 9,    @aim.lat.minutes
+    assert 58.2 - @aim.lat.seconds < 0.0001
 
     assert_equal 7,     @aim.long.degrees
     assert_equal 9,     @aim.long.minutes
