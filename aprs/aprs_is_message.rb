@@ -71,8 +71,10 @@ class AprsIsMessage
   def at data
     # 291651z5209.97N/00709.65W
     data = data.downcase
-    time_format = data[6]
-    time = data[0..5]
+
+    time = data[0..6]
+    parse_time data
+
     coords = data[7..-1]
     parse_coords coords
   end
@@ -106,6 +108,7 @@ class AprsIsMessage
   def parse_time data
     # DDHHMMf
     # 291651z
+
     day   = data[0...2].to_i
     hours = data[2...4].to_i
     min   = data[4...6].to_i

@@ -50,11 +50,22 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
       puts "lat  : #{@aim.lat}"
       puts "long : #{@aim.long}"
       puts "hour : #{@aim.hour}"
+      puts "min  : #{@aim.min}"
 
       assert_equal data['route'], @aim.route, "route should be #{data['route']}, instead got #{@aim.route}"
       assert_equal data['from'],  @aim.from,  "from should be #{data['from']}, instead got #{@aim.from}"
       assert_equal data['to'],    @aim.to,    "to should be #{data['to']}, instead got #{@aim.to}"
-      assert_equal data['hour'],  @aim.hour, "Hour should be #{data['hour']}, instead got #{@aim.hour}"
+
+      assert_in_delta data['lat'][0], @aim.lat.degrees
+      assert_in_delta data['lat'][1], @aim.lat.minutes
+      assert_in_delta data['lat'][2], @aim.lat.seconds
+
+      assert_in_delta data['long'][0], @aim.long.degrees
+      assert_in_delta data['long'][1], @aim.long.minutes
+      assert_in_delta data['long'][2], @aim.long.seconds
+
+      assert_equal data['hour'], @aim.hour, "Hour should be #{data['hour']}, instead got #{@aim.hour}"
+      assert_equal data['min'],  @aim.min,  "Minute should be #{data['min']}, instead got #{@aim.min}"
 
       puts "\n"
     end
