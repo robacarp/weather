@@ -1,0 +1,26 @@
+# We're decoding APRS-IS messages, not bare APRS data.
+
+from http://www.aprs-is.net/Specification.aspx
+- APRS-IS uses TNC2 monitor format: SENDER>DEST,PATH:data
+           sometimes also uses AEA: SENDER>PATH>DEST:data (deprecated)
+
+APRS-IS:
+
+The Tier 2 Network: http://www.aprs2.net/
+Connecting to the stream: http://www.aprs2.net/wiki/pmwiki.php/Main/FilterGuide
+The "canonical" source: http://www.aprs-is.net/
+
+APRS Documentation:
+
+An in depth documentation of APRS AX.25 formatting: ftp://ftp.tapr.org/aprssig/aprsspec/spec/aprs101/APRS101.pdf
+A cursory overview of APRS data payloads: http://www.aprs.net/vm/DOS/PROTOCOL.HTM
+Several symbol tables for APRS: http://www.aprs.net/vm/DOS/SYMBOLS.HTM
+A collection of links about APRS tech, mostly dead: http://www.aprs.net/vm/index.htm
+A plain english explanation of APRS-IS, AX.25, and how messages are routed through the network http://aprsisce.wikidot.com/doc:aprs-messaging-explained
+
+APRS Data viewers:
+
+http://aprs.fi/
+http://www.openaprs.net/
+
+Some example decoding from EOSS: http://www.eoss.org/aprs/aprs_formats_eoss.htm
