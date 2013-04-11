@@ -16,5 +16,15 @@
     'min'      : 04,
     'lat'      : [43,18,33],
     'long'     : [-1,59,31.8]
+  },
+  {
+    'string'   : "DB0FFL>APU25N,TCPIP*,qAC,T2EISBERG:;FFL-Treff*040416z4836.85N\\01211.32E@FFL-Treffen Gh. Luginger jd. 3. Fr. 20h",
+    'from'     : 'DB0FFL',
+    'to'       : 'APU25N',
+    'route'    : 'TCPIP*,qAC,T2EISBERG',
+    'hour'     : 04,
+    'min'      : 16,
+    'lat'      : [48,36,51],
+    'long'     : [12,11,19.2]
   }
 ]

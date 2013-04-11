@@ -41,6 +41,8 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
     @test_cases = Crack::JSON.parse( File.read( 'test_data.json' ) )
 
     @test_cases.each do |data|
+      next if data['test'] == false
+
       @aim.parse data['string']
 
       puts "data : #{@aim.raw_data}"

@@ -33,31 +33,45 @@ class AprsIsMessage
   # http://www.aprs.net/vm/DOS/PROTOCOL.HTM
   def parse_data
     return if raw_data.nil?
+    character = raw_data[0]
 
-    segments = raw_data.split(/(@|!|_|=)/)
-                       .reject{|s| s.empty?}
-                       .each_slice(2)
-                       .map{|(a,b)| [a,b]}
-
-    segments.each do |(type, message)|
-      # puts "\t #{type} >> #{message}"
-      case type
-      when '='
-        equal message
-      when '@'
-        at message
-      when '!'
-        bang message
-      when '_'
-        underscore message
-      when '$'
-        dollar message
-      end
+    case character
+    when ';'  #object, p58
+      semi raw_data
+    when '='
+      equal raw_data
+    when '@'
+      at raw_data
+    when '!'
+      bang raw_data
+    when '_'
+      underscore raw_data
+    when '$'
+      dollar raw_data
     end
   end
 
+  def semi data
+    object_name = data[1..9]
+    live = data[10] == '*'
+    time = data[11..17]
+    lat  = data[18..25]
+    long = data[27..35]
+
+    symbol_table = data[26]
+    symbol_code = data[36]
+    data = data[37..43]
+    comment = data[44..-1]
+
+    parse_coords "#{lat}/#{long}"
+    parse_time time
+
+    # puts object_name, live, time, lat, long, symbol_code, data, comment
+  end
+
   def bang data
-    parse_coords data
+    coords = data[1..18]
+    parse_coords coords
   end
 
   def equal data
@@ -70,13 +84,12 @@ class AprsIsMessage
 
   def at data
     # 291651z5209.97N/00709.65W
-    data = data.downcase
-
-    time = data[0..6]
-    parse_time data
-
-    coords = data[7..-1]
+    time = data[1..7]
+    coords = data[8..25]
+    parse_time time
     parse_coords coords
+
+    # puts @unparsed, time, coords
   end
 
   def dollar data
@@ -88,6 +101,8 @@ class AprsIsMessage
   end
 
 
+  # TODO implement "position ambiguity"
+  # p24 of APRS101.pdf
   def parse_coords data
     # DDMM.hhX/DDDMM.hhX
     # 5209.97N/00709.65W
@@ -105,6 +120,8 @@ class AprsIsMessage
     @long.set long[0..2].to_f * long_sign, long[3..-2].to_f
   end
 
+  # TODO implement different time formats:
+  # p22 of APRS101.pdf
   def parse_time data
     # DDHHMMf
     # 291651z
@@ -125,10 +142,17 @@ class AprsIsMessage
       month -= 1
     end
 
+    if day < 1
+      day = 1
+    end
+
     if month <= 0
       year -= 1
       month = 12
     end
+
+    hours = 0 if hours > 23 || hours < 0
+    min   = 0 if min   > 59 || min   < 0
 
     @time = Time.new(
       year,
