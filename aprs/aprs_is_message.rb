@@ -67,14 +67,10 @@ class AprsIsMessage
 
     symbol_table = data[26]
     symbol_code = data[36]
-    data_ext = data[37..43]
-    comment = data[44..-1]
-
-    parse_data_extension data_ext
-    parse_coords "#{lat}/#{long}"
 
     parse_time time
-
+    parse_coords "#{lat}/#{long}"
+    @parsed[:comment] = parse_data_extension data[37..-1]
   end
 
   def bang data

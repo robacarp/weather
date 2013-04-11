@@ -46,7 +46,14 @@
     'lat'      : [41,40,48.6],
     'long'     : [-111,51,16.8],
     'course'   : 265,
-    'speed'    : 1
+    'speed'    : 1,
+    'gust'       : 6,
+    'temperature': 64,
+    'hour_rain'  : 0,
+    'day_rain'   : 0,
+    'todays_rain': 0,
+    'humidity'   : 31,
+    'barometer'  : 10217
   },
   {
     'string'   : "ZS1DFR-1>APU25N,ZS1MTF*,qAR,ZS1OA-1:=3353.33S/01833.36E_Dave in Plattekloof Glen {UIV32N}",
