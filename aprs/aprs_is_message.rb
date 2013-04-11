@@ -14,6 +14,10 @@ class AprsIsMessage
     @parsed[name]
   end
 
+  def has? name
+    ! @parsed[name].nil?
+  end
+
   def self.parse line
     mess = self.new
     mess.parse line
@@ -102,12 +106,16 @@ class AprsIsMessage
 
   # TODO implement "position ambiguity"
   # p24 of APRS101.pdf
+  # TODO implement "compressed coordinates"
   def parse_coords data
     # DDMM.hhX/DDDMM.hhX
     # 5209.97N/00709.65W
     # 3107.77N/12124.52E
     # 4820.32N/00809.24E
+    # 7Z$?;7?p_r4b
     lat, long = data.upcase.split '/'
+    return if lat.nil? || long.nil?
+    return if lat.empty? || long.empty?
 
     lat_sign = lat[-1] == 'N' ? 1 : -1
     long_sign = long[-1] == 'E' ? 1 : -1

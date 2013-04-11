@@ -57,13 +57,17 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
       assert_equal data['from'],  @aim[:from]
       assert_equal data['to'],    @aim[:to]
 
-      assert_in_delta data['lat'][0], @aim[:lat].degrees
-      assert_in_delta data['lat'][1], @aim[:lat].minutes
-      assert_in_delta data['lat'][2], @aim[:lat].seconds
+      unless data['lat'].nil?
+        assert_in_delta data['lat'][0], @aim[:lat].degrees
+        assert_in_delta data['lat'][1], @aim[:lat].minutes
+        assert_in_delta data['lat'][2], @aim[:lat].seconds
+      end
 
-      assert_in_delta data['long'][0], @aim[:long].degrees
-      assert_in_delta data['long'][1], @aim[:long].minutes
-      assert_in_delta data['long'][2], @aim[:long].seconds
+      unless data['long'].nil?
+        assert_in_delta data['long'][0], @aim[:long].degrees
+        assert_in_delta data['long'][1], @aim[:long].minutes
+        assert_in_delta data['long'][2], @aim[:long].seconds
+      end
 
       assert_equal data['hour'], @aim.hour
       assert_equal data['min'],  @aim.min

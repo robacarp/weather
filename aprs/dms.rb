@@ -23,8 +23,8 @@ class DMS
       @seconds = f_part * 60
     end
 
-    @minutes = @minutes.abs
-    @seconds = @seconds.abs
+    @minutes = (@minutes || 0).abs
+    @seconds = (@seconds || 0).abs
   end
 
   def degrees

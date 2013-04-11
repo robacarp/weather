@@ -74,5 +74,14 @@
     'height'   : 20,
     'gain'     : 3,
     'directivity' : 0
-  }
+  },
+  {
+    'string'   : "VA3UW-1>APU25N,TCPIP*,qAC,T2UK:@291947z/7Z$?;7?p_r4bg010t048r000p...P000h37b10080 Almonte WX",
+    'from'     : 'VA3UW-1',
+    'to'       : 'APU25N',
+    'route'    : 'TCPIP*,qAC,T2UK',
+    'hour'     : 19,
+    'min'      : 47
+  },
+
 ]
