@@ -26,5 +26,16 @@
     'min'      : 16,
     'lat'      : [48,36,51],
     'long'     : [12,11,19.2]
+  },
+  {
+    'string'   : "AG1T>APWW10,TCPIP*,qAC,T2CSNGRAD:;AG1T-1   *291354z4140.81N/11151.28W_265/001g006t064r000p000P000h31b10217",
+    'from'     : 'AG1T',
+    'to'       : 'APWW10',
+    'route'    : 'TCPIP*,qAC,T2CSNGRAD',
+    'hour'     : 13,
+    'min'      : 54,
+    'lat'      : [41,40,48.6],
+    'long'     : [-111,51,16.8]
   }
+
 ]

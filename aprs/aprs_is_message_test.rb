@@ -37,12 +37,12 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
     assert 39 - @aim.long.seconds < 0.0001
   end
 
-  def test_parsing_messages
-    @test_cases = Crack::JSON.parse( File.read( 'test_data.json' ) )
+  @test_cases = Crack::JSON.parse( File.read( 'test_data.json' ) )
 
-    @test_cases.each do |data|
-      next if data['test'] == false
+  @test_cases.each_with_index do |data,i|
+    next if data['test'] == false
 
+    define_method("test_data_#{i}") {
       @aim.parse data['string']
 
       puts "data : #{@aim.raw_data}"
@@ -70,7 +70,7 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
       assert_equal data['min'],  @aim.min,  "Minute should be #{data['min']}, instead got #{@aim.min}"
 
       puts "\n"
-    end
+    }
   end
 
 end
