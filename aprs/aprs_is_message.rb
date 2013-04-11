@@ -155,12 +155,10 @@ class AprsIsMessage
 
 
   def parse_data_extension data
-    height = lambda {|n| if n == 0; 10; else; height[n-1] * 2; end}
-
     case
     when data[0..2] == 'PHG'
       @parsed[:power]       = data[3].to_i ** 2
-      @parsed[:height]      = height[ data[4].to_i ]
+      @parsed[:height]      = 10 * ( 2 ** data[4].to_i )
       @parsed[:gain]        = data[5].to_i
       @parsed[:directivity] = data[6].to_i * 45
 
