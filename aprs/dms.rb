@@ -8,10 +8,8 @@ class DMS
     @minutes = minutes
     @seconds = seconds
 
-    if @degrees < 0
-      @negative = true
-      @degrees  = @degrees.abs
-    end
+    @negative = @degrees < 0
+    @degrees  = @degrees.abs
 
     unless @degrees == @degrees.round
       @degrees = degrees.truncate
@@ -31,10 +29,10 @@ class DMS
 
   def degrees
     multiple = negative ? -1 : 1
-    @degrees * multiple
+    (@degrees || 0) * multiple
   end
 
   def to_s
-    "#{degrees}º#{minutes}'#{seconds.round(4)}\""
+    "#{degrees}º#{minutes}'#{(seconds || 0).round(4)}\""
   end
 end

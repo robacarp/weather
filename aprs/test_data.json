@@ -8,14 +8,23 @@
     'long'     : [-89,23,57.6]
   },
   {
-    'string'   : "EA2URD-13>APU25N,EA2TZ-3,WIDE1,EA2URV-3,WIDE2*,qAR,EA2RCX-5:@292004z4318.55N/00159.53W_045/006g012t056r009p064P063h99b10115 WX EA2RCE Cumulus 1.9.2",
-    'from'     : 'EA2URD-13',
-    'to'       : 'APU25N',
-    'route'    : 'EA2TZ-3,WIDE1,EA2URV-3,WIDE2*,qAR,EA2RCX-5',
-    'hour'     : 20,
-    'min'      : 04,
-    'lat'      : [43,18,33],
-    'long'     : [-1,59,31.8]
+    'string'     : "EA2URD-13>APU25N,EA2TZ-3,WIDE1,EA2URV-3,WIDE2*,qAR,EA2RCX-5:@292004z4318.55N/00159.53W_045/006g012t056r009p064P063h99b10115 WX EA2RCE Cumulus 1.9.2",
+    'from'       : 'EA2URD-13',
+    'to'         : 'APU25N',
+    'route'      : 'EA2TZ-3,WIDE1,EA2URV-3,WIDE2*,qAR,EA2RCX-5',
+    'hour'       : 20,
+    'min'        : 4,
+    'lat'        : [43,18,33],
+    'long'       : [-1,59,31.8],
+    'course'     : 45,
+    'speed'      : 6,
+    'gust'       : 12,
+    'temperature': 56,
+    'hour_rain'  : 9,
+    'day_rain'   : 64,
+    'todays_rain': 63,
+    'humidity'   : 99,
+    'barometer'  : 10115
   },
   {
     'string'   : "DB0FFL>APU25N,TCPIP*,qAC,T2EISBERG:;FFL-Treff*040416z4836.85N\\01211.32E@FFL-Treffen Gh. Luginger jd. 3. Fr. 20h",
@@ -35,7 +44,28 @@
     'hour'     : 13,
     'min'      : 54,
     'lat'      : [41,40,48.6],
-    'long'     : [-111,51,16.8]
+    'long'     : [-111,51,16.8],
+    'course'   : 265,
+    'speed'    : 1
+  },
+  {
+    'string'   : "ZS1DFR-1>APU25N,ZS1MTF*,qAR,ZS1OA-1:=3353.33S/01833.36E_Dave in Plattekloof Glen {UIV32N}",
+    'from'     : 'ZS1DFR-1',
+    'to'       : 'APU25N',
+    'route'    : 'ZS1MTF*,qAR,ZS1OA-1',
+    'lat'      : [-33,53,19.8],
+    'long'     : [18,33,21.6]
+  },
+  {
+    'string'   : "WE0Z-13>APX200,TCPIP*,qAC,T2MCI:=3911.69N/09437.49W_PHG5130XASTIR-Linux",
+    'from'     : 'WE0Z-13',
+    'to'       : 'APX200',
+    'route'    : 'TCPIP*,qAC,T2MCI',
+    'lat'      : [39,11,41.4],
+    'long'     : [-94,37,29.4],
+    'power'    : 25,
+    'height'   : 20,
+    'gain'     : 3,
+    'directivity' : 0
   }
-
 ]
