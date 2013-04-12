@@ -167,54 +167,58 @@ class AprsIsMessage
     # puts "+#{data}"
     return if data.nil? || data.empty?
 
-    case
-    when data[0] == '_'
-      parse_data_extension data[1..-1]
+    while data.length > 0
 
-    when data[0..3] =~ /^(c|s|g|t|r|p|P)[0-9.]{3}/
-      map = {
-        'c' => :wind_direction,
-        's' => :wind_speed,  'g' => :gust,
-        't' => :temperature, 'r' => :hour_rain,
-        'p' => :day_rain,    'P' => :todays_rain
-      }
+      case
+      when data[0] == '_'
+        data = data[1..-1]
 
-      key   = map[$1]
-      value = data[1..3].to_i
-      @parsed[key] = value
+      when data[0..3] =~ /^(c|s|g|t|r|p|P)([0-9.]{3})/
+        map = {
+          'c' => :wind_direction,
+          's' => :wind_speed,  'g' => :gust,
+          't' => :temperature, 'r' => :hour_rain,
+          'p' => :day_rain,    'P' => :todays_rain
+        }
 
-      parse_data_extension data[4..-1]
+        key   = map[$1]
+        value = $2.to_i
+        @parsed[key] = value
 
-    when data[0..2] =~ /^h[0-9.]{2}/
-      @parsed[:humidity] = data[1..2].to_i
-      parse_data_extension data[3..-1]
+        data = data[4..-1]
 
-    when data[0..5] =~ /^b[0-9.]{5}/
-      @parsed[:barometer] = data[1..5].to_i
-      parse_data_extension data[6..-1]
+      when data[0..2] =~ /^h[0-9.]{2}/
+        @parsed[:humidity] = data[1..2].to_i
+        data = data[3..-1]
 
-    when data[0..6] =~ /^PHG[0-9.]{4}/
-      @parsed[:power]       = data[3].to_i ** 2
-      @parsed[:height]      = 10 * ( 2 ** data[4].to_i )
-      @parsed[:gain]        = data[5].to_i
-      @parsed[:directivity] = data[6].to_i * 45
-      parse_data_extension data[6..-1]
+      when data[0..5] =~ /^b[0-9.]{5}/
+        @parsed[:barometer] = data[1..5].to_i
+        data = data[6..-1]
 
-    when data[0..2] == 'RNG'
-    when data[0..2] == 'DFS'
-    when data[0] == 'T' && data[4] == 'C'
-    when data[0..6] =~ /^\d{3}\/\d{3}/
-      @parsed[:course] = data[0..2].to_i
-      @parsed[:speed]  = data[4..6].to_i
-      parse_data_extension data[7..-1]
+      when data[0..6] =~ /^PHG[0-9.]{4}/
+        @parsed[:power]       = data[3].to_i ** 2
+        @parsed[:height]      = 10 * ( 2 ** data[4].to_i )
+        @parsed[:gain]        = data[5].to_i
+        @parsed[:directivity] = data[6].to_i * 45
+        data = data[6..-1]
 
-    else
-      if data.strip.empty?
-        ''
+      when data[0..2] == 'RNG'
+      when data[0..2] == 'DFS'
+      when data[0] == 'T' && data[4] == 'C'
+      when data[0..6] =~ /^\d{3}\/\d{3}/
+        @parsed[:course] = data[0..2].to_i
+        @parsed[:speed]  = data[4..6].to_i
+        data = data[7..-1]
+
       else
-        @parsed[:comment] += data[0]
-        parse_data_extension data[1..-1]
+        if data.strip.empty?
+          ''
+        else
+          @parsed[:comment] += data[0]
+          data = data[1..-1]
+        end
       end
+
     end
   end
 
