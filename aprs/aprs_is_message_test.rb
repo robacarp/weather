@@ -41,6 +41,7 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
 
   @test_cases.each_with_index do |data,i|
     next if data['test'] == false
+    # next unless data['debug']
 
     define_method("test_data_#{i}") {
       @aim.parse data['string']
@@ -53,9 +54,15 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
         puts "\n"
       end
 
-      assert_equal data['route'], @aim[:route]
-      assert_equal data['from'],  @aim[:from]
-      assert_equal data['to'],    @aim[:to]
+      equal_macro = lambda{|name|
+        if data[name.to_s]
+          assert_equal data[name.to_s], @aim[name.to_sym], "\033[31m#{name} mismatch\033[0m on #{data['string'][0..12]}..."
+        end
+      }
+
+      equal_macro[:route]
+      equal_macro[:from]
+      equal_macro[:to]
 
       unless data['lat'].nil?
         assert_in_delta data['lat'][0], @aim[:lat].degrees
@@ -72,20 +79,21 @@ class AprsIsMessageTest < MiniTest::Unit::TestCase
       assert_equal data['hour'], @aim.hour
       assert_equal data['min'],  @aim.min
 
-      assert_equal data['course'], @aim[:course]
-      assert_equal data['speed'],  @aim[:speed]
+      equal_macro[:course]
+      equal_macro[:speed]
 
-      assert_equal data['power'],       @aim[:power]
-      assert_equal data['height'],      @aim[:height]
-      assert_equal data['gain'],        @aim[:gain]
-      assert_equal data['directivity'], @aim[:directivity]
+      equal_macro[:power]
+      equal_macro[:height]
+      equal_macro[:gain]
+      equal_macro[:directivity]
 
-      assert_equal data['temperature'], @aim[:temperature]
-      assert_equal data['hour_rain'],   @aim[:hour_rain]
-      assert_equal data['day_rain'],    @aim[:day_rain]
-      assert_equal data['todays_rain'], @aim[:todays_rain]
-      assert_equal data['humidity'],    @aim[:humidity]
-      assert_equal data['barometer'],   @aim[:barometer]
+      equal_macro[:temperature]
+      equal_macro[:hour_rain]
+      equal_macro[:day_rain]
+      equal_macro[:todays_rain]
+      equal_macro[:humidity]
+      equal_macro[:barometer]
+      equal_macro[:comment]
     }
   end
 

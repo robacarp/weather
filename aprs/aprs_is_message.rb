@@ -6,7 +6,8 @@ class AprsIsMessage
   def initialize
     @parsed = {
       lat: DMS.new,
-      long: DMS.new
+      long: DMS.new,
+      comment: ''
     }
   end
 
@@ -74,7 +75,7 @@ class AprsIsMessage
 
     parse_time time
     parse_coords "#{lat}/#{long}"
-    @parsed[:comment] = parse_data_extension data[37..-1]
+    parse_data_extension data[37..-1]
   end
 
   def bang data
@@ -85,14 +86,14 @@ class AprsIsMessage
   def equal data
     # =3911.69N/09437.49W_PHG5130XASTIR-Linux",
     parse_coords data[1..18]
-    @parsed[:comment] = parse_data_extension data[20..-1]
+    parse_data_extension data[18..-1]
   end
 
   def at data
     # @291651z5209.97N/00709.65W
     parse_time data[1..7]
     parse_coords data[8..25]
-    @parsed[:comment] = parse_data_extension data[27..-1]
+    parse_data_extension data[26..-1]
   end
 
   def dollar data
@@ -163,13 +164,17 @@ class AprsIsMessage
 
 
   def parse_data_extension data
+    return '' if data.nil? || data.empty?
+
     case
-    when data[0..2] == 'PHG'
+    when data[0] == '_'
+      parse_data_extension data[1..-1]
+
+    when data[0..6] =~ /^PHG[0-9.]{4}/
       @parsed[:power]       = data[3].to_i ** 2
       @parsed[:height]      = 10 * ( 2 ** data[4].to_i )
       @parsed[:gain]        = data[5].to_i
       @parsed[:directivity] = data[6].to_i * 45
-
       parse_data_extension data[6..-1]
 
     when data[0..2] == 'RNG'
@@ -180,44 +185,49 @@ class AprsIsMessage
       @parsed[:speed]  = data[4..6].to_i
       parse_data_extension data[7..-1]
 
-    when data[0] == 'c'
+    when data[0..3] =~ /^c[0-9.]{3}/
       @parsed[:wind_direction] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 's'
+    when data[0..3] =~ /^s[0-9.]{3}/
       @parsed[:wind_speed] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 'g'
+    when data[0..3] =~ /^g[0-9.]{3}/
       @parsed[:gust] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 't'
+    when data[0..3] =~ /^t[0-9.]{3}/
       @parsed[:temperature] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 'r'
+    when data[0..3] =~ /^r[0-9.]{3}/
       @parsed[:hour_rain] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 'p'
+    when data[0..3] =~ /^p[0-9.]{3}/
       @parsed[:day_rain] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 'P'
+    when data[0..3] =~ /^P[0-9.]{3}/
       @parsed[:todays_rain] = data[1..3].to_i
       parse_data_extension data[4..-1]
 
-    when data[0] == 'h'
+    when data[0..2] =~ /^h[0-9.]{2}/
       @parsed[:humidity] = data[1..2].to_i
       parse_data_extension data[3..-1]
 
-    when data[0] == 'b'
+    when data[0..5] =~ /^b[0-9.]{5}/
       @parsed[:barometer] = data[1..5].to_i
       parse_data_extension data[6..-1]
 
     else
-      data
+      if data.strip.empty?
+        ''
+      else
+        @parsed[:comment] += data[0]
+        parse_data_extension data[1..-1]
+      end
     end
   end
 

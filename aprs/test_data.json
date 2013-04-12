@@ -76,12 +76,46 @@
     'directivity' : 0
   },
   {
-    'string'   : "VA3UW-1>APU25N,TCPIP*,qAC,T2UK:@291947z/7Z$?;7?p_r4bg010t048r000p...P000h37b10080 Almonte WX",
-    'from'     : 'VA3UW-1',
-    'to'       : 'APU25N',
-    'route'    : 'TCPIP*,qAC,T2UK',
-    'hour'     : 19,
-    'min'      : 47
+    'string'     : "VA3UW-1>APU25N,TCPIP*,qAC,T2UK:@291947z/7Z$?;7?p_r4bg010t048r000p...P000h37b10080 Almonte WX",
+    'from'       : 'VA3UW-1',
+    'to'         : 'APU25N',
+    'route'      : 'TCPIP*,qAC,T2UK',
+    'hour'       : 19,
+    'min'        : 47,
+    'broken_temperature': 48,
+    'broken_because': "lat and long appear to be compressed or something",
+    'hour_rain'  : 0,
+    'day_rain'   : 0,
+    'todays_rain': 0,
+    'humidity'   : 37,
+    'barometer'  : 10080
   },
+  {
+    'string'      : "K2RFH>APRS,TCPIP*,qAC,FIFTH:@112314z4053.42N/07440.35W_165/005g013t049r000p060P000h89b10132.DsVP",
+    'from'        : 'K2RFH',
+    'to'          : 'APRS',
+    'route'       : 'TCPIP*,qAC,FIFTH',
+    'hour'        : 23,
+    'min'         : 14,
+    'lat'         : [40,53,25.2],
+    'long'        : [-74,40,21],
+    'course'      : 165,
+    'speed'       : 5,
+    'gust'        : 13,
+    'temperature' : 49,
+    'hour_rain'   : 0,
+    'day_rain'    : 60,
+    'todays_rain' : 0,
+    'humidity'    : 89,
+    'barometer'   : 10132,
+    'comment'     : ".DsVP",
+  },
+  {
+    'string'     : "ON8CB-2>APWW10,APRS,WIDE3-3,qAS,ON8CB:/121919z5030.53N/00356.97E_115/004g007t055r000p008P008h58b09930cloudyperiods"
+  },
+  {
+    'string'     : "W5NGU-4>APRS,WIDE,WIDE,qAR,N5GMJ-10:$ULTW00000000022F0000----000086A00001----0047035700000000"
+  },
+
 
 ]

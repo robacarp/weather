@@ -7,8 +7,8 @@ def parse_line line
 
   begin
     @aim = AprsIsMessage.parse line
-  rescue
-    puts "Message Parsing failed"
+  rescue Exception => e
+    puts "\033[31mMessage Parsing failed\033[0m: #{e.message}"
     return
   end
 
@@ -37,11 +37,11 @@ def parse_line line
   puts "todays_rain: " + @aim[:todays_rain].to_s   if @aim.has? :todays_rain
   puts "humidity: "    + @aim[:humidity].to_s      if @aim.has? :humidity
   puts "barometer: "   + @aim[:barometer].to_s     if @aim.has? :barometer
-  puts "\n-----------\ncomment: "     + @aim[:comment]            if @aim.has? :comment
+  puts "\n-----------\ncomment: "     + @aim[:comment]            unless @aim[:comment].empty?
   puts "\n-----------"
 end
 
-if true
+if false
   File.open('data-log.txt','r') do |historical_data|
     until historical_data.eof?
       parse_line historical_data.readline
