@@ -167,7 +167,12 @@ class AprsIsMessage
     # puts "+#{data}"
     return if data.nil? || data.empty?
 
+    last_data = ''
     while data.length > 0
+      # a bit of a safeguard against infinite loops.
+      #   If the string hasn't changed, we're stuck.
+      break if last_data == data
+      last_data = data
 
       case
       when data[0] == '_'
@@ -204,15 +209,15 @@ class AprsIsMessage
 
       when data[0..2] == 'RNG'
       when data[0..2] == 'DFS'
-      when data[0] == 'T' && data[4] == 'C'
-      when data[0..6] =~ /^\d{3}\/\d{3}/
+      when data[0..6] =~ %r|^T\d{2}/C\d{2}|
+      when data[0..6] =~ %r|^\d{3}/\d{3}|
         @parsed[:course] = data[0..2].to_i
         @parsed[:speed]  = data[4..6].to_i
         data = data[7..-1]
 
       else
         if data.strip.empty?
-          ''
+          data = ''
         else
           @parsed[:comment] += data[0]
           data = data[1..-1]
