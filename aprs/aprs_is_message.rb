@@ -164,11 +164,34 @@ class AprsIsMessage
 
 
   def parse_data_extension data
-    return '' if data.nil? || data.empty?
+    # puts "+#{data}"
+    return if data.nil? || data.empty?
 
     case
     when data[0] == '_'
       parse_data_extension data[1..-1]
+
+    when data[0..3] =~ /^(c|s|g|t|r|p|P)[0-9.]{3}/
+      map = {
+        'c' => :wind_direction,
+        's' => :wind_speed,  'g' => :gust,
+        't' => :temperature, 'r' => :hour_rain,
+        'p' => :day_rain,    'P' => :todays_rain
+      }
+
+      key   = map[$1]
+      value = data[1..3].to_i
+      @parsed[key] = value
+
+      parse_data_extension data[4..-1]
+
+    when data[0..2] =~ /^h[0-9.]{2}/
+      @parsed[:humidity] = data[1..2].to_i
+      parse_data_extension data[3..-1]
+
+    when data[0..5] =~ /^b[0-9.]{5}/
+      @parsed[:barometer] = data[1..5].to_i
+      parse_data_extension data[6..-1]
 
     when data[0..6] =~ /^PHG[0-9.]{4}/
       @parsed[:power]       = data[3].to_i ** 2
@@ -180,46 +203,10 @@ class AprsIsMessage
     when data[0..2] == 'RNG'
     when data[0..2] == 'DFS'
     when data[0] == 'T' && data[4] == 'C'
-    when data[3] == '/'
+    when data[0..6] =~ /^\d{3}\/\d{3}/
       @parsed[:course] = data[0..2].to_i
       @parsed[:speed]  = data[4..6].to_i
       parse_data_extension data[7..-1]
-
-    when data[0..3] =~ /^c[0-9.]{3}/
-      @parsed[:wind_direction] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^s[0-9.]{3}/
-      @parsed[:wind_speed] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^g[0-9.]{3}/
-      @parsed[:gust] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^t[0-9.]{3}/
-      @parsed[:temperature] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^r[0-9.]{3}/
-      @parsed[:hour_rain] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^p[0-9.]{3}/
-      @parsed[:day_rain] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..3] =~ /^P[0-9.]{3}/
-      @parsed[:todays_rain] = data[1..3].to_i
-      parse_data_extension data[4..-1]
-
-    when data[0..2] =~ /^h[0-9.]{2}/
-      @parsed[:humidity] = data[1..2].to_i
-      parse_data_extension data[3..-1]
-
-    when data[0..5] =~ /^b[0-9.]{5}/
-      @parsed[:barometer] = data[1..5].to_i
-      parse_data_extension data[6..-1]
 
     else
       if data.strip.empty?
